@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Image from "next/image";
 import { useSession } from "@/lib/supabase/session-provider";
 import { getProfile, updateProfile, uploadAvatar } from "@/lib/services/profileService";
 
@@ -112,11 +111,10 @@ export default function AccountPage() {
           <div className="flex items-center gap-6">
             <div className="relative w-20 h-20 rounded-full overflow-hidden bg-surface border border-border">
               {(previewUrl || avatarUrl) ? (
-                <Image
+                <img
                   src={previewUrl || avatarUrl!}
                   alt="Avatar"
-                  fill
-                  className="object-cover"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-2xl text-primary/30">
