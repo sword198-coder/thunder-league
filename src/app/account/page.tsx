@@ -60,6 +60,7 @@ export default function AccountPage() {
       setMessage({ type: "success", text: "Avatar updated successfully" });
       if (fileInputRef.current) fileInputRef.current.value = "";
     } else {
+      console.error("Account: uploadAvatar returned null");
       setMessage({ type: "error", text: "Failed to upload avatar" });
     }
     setUploading(false);

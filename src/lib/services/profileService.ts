@@ -18,7 +18,8 @@ export async function getProfile(userId: string): Promise<Profile | null> {
     .single();
 
   if (error) {
-    logger.error("profileService: getProfile failed", { error: error.message });
+    console.error("FULL SUPABASE ERROR (getProfile):", error);
+    logger.error("profileService: getProfile failed", error);
     return null;
   }
   return data;
@@ -35,7 +36,8 @@ export async function updateProfile(
     .eq("id", userId);
 
   if (error) {
-    logger.error("profileService: updateProfile failed", { error: error.message });
+    console.error("FULL SUPABASE ERROR (updateProfile):", error);
+    logger.error("profileService: updateProfile failed", error);
     return false;
   }
   logger.info("profileService: profile updated", { userId, updates });
@@ -56,7 +58,8 @@ export async function uploadAvatar(
     .upload(filePath, file, { upsert: true });
 
   if (uploadError) {
-    logger.error("profileService: uploadAvatar failed", { error: uploadError.message });
+    console.error("FULL SUPABASE ERROR (uploadAvatar):", uploadError);
+    logger.error("profileService: uploadAvatar failed", uploadError);
     return null;
   }
 
