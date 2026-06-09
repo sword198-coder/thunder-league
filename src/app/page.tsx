@@ -18,7 +18,7 @@ export default function Home() {
             <div className="p-6 rounded-xl bg-surface border border-border">
               <div className="text-3xl mb-2">🏆</div>
               <h3 className="font-semibold text-primary mb-1">Grand Prize</h3>
-              <p className="text-sm text-primary/60">$50,000 championship pool</p>
+              <p className="text-sm text-primary/60">championship pool</p>
             </div>
             <div className="p-6 rounded-xl bg-surface border border-border">
               <div className="text-3xl mb-2">🌍</div>
