@@ -24,7 +24,7 @@ export default function Header() {
     }
 
     links.push(
-      { label: "Discord", href: "https://discord.gg/JeStZyPF2p", external: true },
+      { label: "Discord", href: "https://discord.gg/bhHjQmV3Jn", external: true },
       { label: "YouTube", href: "https://youtube.com", external: true },
     );
 
@@ -43,7 +43,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/logo.jpg" alt="Thunder League" width={120} height={32} className="h-8 w-auto" />
+            <Image src="/logo.jpg" alt="Thunder League" width={160} height={60} className="h-8 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
