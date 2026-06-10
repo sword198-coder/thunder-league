@@ -16,8 +16,26 @@ const m = (round: "QF" | "SF" | "F", pos: number, num: number, p1: BracketPlayer
   player1: p1, player2: p2, winner: null,
 });
 
+function makeTournament(overrides: Partial<Tournament> & Pick<Tournament, "id" | "name" | "tier" | "status" | "currentPlayers" | "maxPlayers" | "startDate" | "endDate" | "registeredPlayers" | "bracket" | "createdAt">): Tournament {
+  return {
+    description: "",
+    banner_url: null,
+    prize_pool: "",
+    registration_deadline: null,
+    rules: "",
+    game: "War Thunder",
+    stream_url: "",
+    discord_link: "",
+    trailer_url: "",
+    sponsors: "",
+    check_in_open: false,
+    created_by: null,
+    ...overrides,
+  };
+}
+
 export const defaultTournaments: Tournament[] = [
-  {
+  makeTournament({
     id: "t1",
     name: "Thunder Strike Cup",
     tier: "Top",
@@ -33,8 +51,8 @@ export const defaultTournaments: Tournament[] = [
     ],
     bracket: null,
     createdAt: "2026-06-01T00:00:00Z",
-  },
-  {
+  }),
+  makeTournament({
     id: "t2",
     name: "Aerial Assault Series",
     tier: "High",
@@ -48,8 +66,8 @@ export const defaultTournaments: Tournament[] = [
     ],
     bracket: null,
     createdAt: "2026-06-01T00:00:00Z",
-  },
-  {
+  }),
+  makeTournament({
     id: "t3",
     name: "Dogfight Championship",
     tier: "Mid",
@@ -74,8 +92,8 @@ export const defaultTournaments: Tournament[] = [
       m("F", 1, 7, null, null, "Pending", "TBD"),
     ],
     createdAt: "2026-06-01T00:00:00Z",
-  },
-  {
+  }),
+  makeTournament({
     id: "t4",
     name: "Wings of Glory",
     tier: "Low",
@@ -89,5 +107,5 @@ export const defaultTournaments: Tournament[] = [
     ],
     bracket: null,
     createdAt: "2026-06-01T00:00:00Z",
-  },
+  }),
 ];

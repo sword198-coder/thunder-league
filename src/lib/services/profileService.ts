@@ -51,7 +51,7 @@ export async function uploadAvatar(
   const supabase = createBrowserClient();
 
   const ext = file.name.split(".").pop() || "png";
-  const filePath = `${userId}/avatar.${ext}`;
+  const filePath = `${userId}/avatar-${Date.now()}.${ext}`;
 
   const { error: uploadError } = await supabase.storage
     .from("avatars")

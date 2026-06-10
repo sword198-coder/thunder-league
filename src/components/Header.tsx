@@ -3,15 +3,26 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "@/lib/supabase/session-provider";
 import type { NavLink } from "@/types";
+import { isAdmin } from "@/lib/services/adminService";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const { user, loading, signOut } = useSession();
+
+  useEffect(() => {
+    if (user) {
+      isAdmin(user.id).then(setAdmin);
+    } else {
+      setAdmin(false);
+    }
+  }, [user]);
 
   const navLinks = useMemo(() => {
     const links: NavLink[] = [
@@ -21,6 +32,10 @@ export default function Header() {
 
     if (user) {
       links.push({ label: "Tournaments", href: "/tournaments" });
+    }
+
+    if (admin) {
+      links.push({ label: "Admin", href: "/admin" });
     }
 
     links.push(
@@ -36,7 +51,7 @@ export default function Header() {
     }
 
     return links;
-  }, [user]);
+  }, [user, admin]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border shadow-sm">
@@ -83,12 +98,15 @@ export default function Header() {
                   );
                 })}
                 {user && (
-                  <button
-                    onClick={signOut}
-                    className="relative px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-secondary text-white hover:bg-secondary/90 shadow-sm"
-                  >
-                    Logout
-                  </button>
+                  <>
+                    <NotificationBell />
+                    <button
+                      onClick={signOut}
+                      className="relative px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-secondary text-white hover:bg-secondary/90 shadow-sm"
+                    >
+                      Logout
+                    </button>
+                  </>
                 )}
               </>
             )}

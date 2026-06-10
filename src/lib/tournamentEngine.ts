@@ -1,60 +1,8 @@
 import type { Tournament, Match, BracketPlayer, DrawBotStep, TournamentLifecycleState } from "@/types";
+import { generateBracket } from "@/lib/bracketEngine";
 import { logger } from "@/lib/logger";
 
-function shuffleArray<T>(arr: T[]): T[] {
-  const shuffled = [...arr];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-export function generateBracket(players: BracketPlayer[]): Match[] {
-  const shuffled = shuffleArray(players);
-  const matches: Match[] = [];
-  const times = ["18:00 UTC", "19:00 UTC", "20:00 UTC", "21:00 UTC"];
-
-  for (let i = 0; i < 4; i++) {
-    matches.push({
-      round: "QF",
-      position: i + 1,
-      matchNumber: i + 1,
-      status: "Ready",
-      scheduledTime: times[i],
-      player1: shuffled[i * 2] ?? null,
-      player2: shuffled[i * 2 + 1] ?? null,
-      winner: null,
-    });
-  }
-
-  for (let i = 0; i < 2; i++) {
-    matches.push({
-      round: "SF",
-      position: i + 1,
-      matchNumber: i + 5,
-      status: "Pending",
-      scheduledTime: "TBD",
-      player1: null,
-      player2: null,
-      winner: null,
-    });
-  }
-
-  matches.push({
-    round: "F",
-    position: 1,
-    matchNumber: 7,
-    status: "Pending",
-    scheduledTime: "TBD",
-    player1: null,
-    player2: null,
-    winner: null,
-  });
-
-  logger.info("Bracket generated", { players: players.length, matches: matches.length });
-  return matches;
-}
+export { generateBracket } from "@/lib/bracketEngine";
 
 export interface DrawBotAnnouncement {
   type: "full" | "matchups" | "started";
@@ -81,10 +29,12 @@ export function runDrawBot(players: BracketPlayer[]): {
 
   const bracket = generateBracket(players);
 
-  announcements.push({ type: "matchups", message: "Matchups are ready! Bracket draw completed." });
-  announcements.push({ type: "started", message: "Tournament STARTED — Round 1 (Quarter Finals) is now live!" });
+  const roundLabel = bracket.length <= 3 ? "Semi Finals" :
+    bracket.length <= 7 ? "Quarter Finals" :
+    bracket.length <= 15 ? "Round of 16" : "Round of 32";
 
-  logger.info("DrawBot executed", { playerCount: players.length });
+  announcements.push({ type: "matchups", message: "Matchups are ready! Bracket draw completed." });
+  announcements.push({ type: "started", message: `Tournament STARTED — ${roundLabel} is now live!` });
 
   return { bracket, announcements, steps: generateDrawBotSteps() };
 }
@@ -107,7 +57,6 @@ export function transitionTournamentState(
     return tournament;
   }
 
-  logger.info("State transition", { id: tournament.id, from: tournament.status, to: targetState });
   return { ...tournament, status: targetState };
 }
 
@@ -125,17 +74,14 @@ export function joinTournament(
   playerName: string
 ): Tournament & { drawBotSteps?: DrawBotStep[] } {
   if (tournament.status !== "CREATED" && tournament.status !== "OPEN") {
-    logger.warn("Cannot join tournament", { status: tournament.status });
     return tournament;
   }
 
   if (tournament.currentPlayers >= tournament.maxPlayers) {
-    logger.warn("Tournament is full", { id: tournament.id });
     return tournament;
   }
 
   if (tournament.registeredPlayers.some((p) => p.name === playerName)) {
-    logger.warn("Player already registered", { playerName, tournamentId: tournament.id });
     return tournament;
   }
 

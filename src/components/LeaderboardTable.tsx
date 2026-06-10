@@ -29,9 +29,10 @@ export default function LeaderboardTable({ data }: Props) {
           <tr className="bg-surface border-b border-border">
             <th className="px-4 py-3 text-left font-semibold text-primary/60 text-xs uppercase tracking-wider">Rank</th>
             <th className="px-4 py-3 text-left font-semibold text-primary/60 text-xs uppercase tracking-wider">Player</th>
-            <th className="px-4 py-3 text-right font-semibold text-primary/60 text-xs uppercase tracking-wider">Kills</th>
+            <th className="px-4 py-3 text-left font-semibold text-primary/60 text-xs uppercase tracking-wider">Team</th>
+            <th className="px-4 py-3 text-right font-semibold text-primary/60 text-xs uppercase tracking-wider">Points</th>
             <th className="px-4 py-3 text-right font-semibold text-primary/60 text-xs uppercase tracking-wider">Wins</th>
-            <th className="px-4 py-3 text-right font-semibold text-primary/60 text-xs uppercase tracking-wider">Score</th>
+            <th className="px-4 py-3 text-right font-semibold text-primary/60 text-xs uppercase tracking-wider">Losses</th>
             <th className="px-4 py-3 text-center font-semibold text-primary/60 text-xs uppercase tracking-wider">Country</th>
           </tr>
         </thead>
@@ -41,7 +42,7 @@ export default function LeaderboardTable({ data }: Props) {
             const badge = rankBadge[entry.rank];
             return (
               <tr
-                key={entry.rank}
+                key={entry.id}
                 className={`transition-colors hover:bg-surface/80 ${entry.rank <= 3 ? rowStyle : ""}`}
               >
                 <td className="px-4 py-3">
@@ -53,10 +54,18 @@ export default function LeaderboardTable({ data }: Props) {
                     <span className="font-mono text-primary/50">#{entry.rank}</span>
                   )}
                 </td>
-                <td className="px-4 py-3 font-medium text-primary">{entry.playerName}</td>
-                <td className="px-4 py-3 text-right font-mono text-primary/80">{entry.kills.toLocaleString()}</td>
+                <td className="px-4 py-3 font-medium text-primary">
+                  <div className="flex items-center gap-2">
+                    {entry.avatar_url && (
+                      <img src={entry.avatar_url} alt="" className="w-6 h-6 rounded-full object-cover" />
+                    )}
+                    {entry.player_name}
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-primary/60">{entry.team_name || "—"}</td>
+                <td className="px-4 py-3 text-right font-mono font-semibold text-primary">{entry.points.toLocaleString()}</td>
                 <td className="px-4 py-3 text-right font-mono text-primary/80">{entry.wins.toLocaleString()}</td>
-                <td className="px-4 py-3 text-right font-mono font-semibold text-primary">{entry.score.toLocaleString()}</td>
+                <td className="px-4 py-3 text-right font-mono text-primary/80">{entry.losses.toLocaleString()}</td>
                 <td className="px-4 py-3 text-center text-lg">{countryFlags[entry.country] ?? entry.country}</td>
               </tr>
             );
