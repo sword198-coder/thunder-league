@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
     loader: "default",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "muvbisveiqaorgdjeaph.supabase.co",
+      },
+    ],
   },
 };
 
