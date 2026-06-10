@@ -189,6 +189,7 @@ export interface TournamentRegistration {
   check_in_at: string | null;
   registered_at: string;
   updated_at: string;
+  player_name: string;
 }
 
 export interface DiscordPayload {

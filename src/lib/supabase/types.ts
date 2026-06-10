@@ -248,6 +248,7 @@ export interface Database {
           check_in_at: string | null;
           registered_at: string;
           updated_at: string;
+          player_name: string;
         };
         Insert: {
           id?: string;
@@ -258,6 +259,7 @@ export interface Database {
           check_in_at?: string | null;
           registered_at?: string;
           updated_at?: string;
+          player_name?: string;
         };
         Update: {
           id?: string;
@@ -268,6 +270,7 @@ export interface Database {
           check_in_at?: string | null;
           registered_at?: string;
           updated_at?: string;
+          player_name?: string;
         };
         Relationships: [];
       };

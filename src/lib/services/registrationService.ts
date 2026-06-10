@@ -22,6 +22,7 @@ export async function fetchMyRegistrations(userId: string): Promise<TournamentRe
     check_in_at: (r as Record<string, unknown>).check_in_at as string | null ?? null,
     registered_at: r.registered_at,
     updated_at: r.updated_at,
+    player_name: (r as Record<string, unknown>).player_name as string ?? "",
   }));
 }
 
@@ -75,6 +76,7 @@ export async function fetchTournamentRegistrations(tournamentId: string): Promis
     check_in_at: (r as Record<string, unknown>).check_in_at as string | null ?? null,
     registered_at: r.registered_at,
     updated_at: r.updated_at,
+    player_name: (r as Record<string, unknown>).player_name as string ?? "",
   }));
 }
 
