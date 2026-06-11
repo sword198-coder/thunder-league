@@ -3,26 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "@/lib/supabase/session-provider";
 import type { NavLink } from "@/types";
-import { isAdmin } from "@/lib/services/adminService";
 import NotificationBell from "@/components/NotificationBell";
 
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [admin, setAdmin] = useState(false);
-  const { user, loading, signOut } = useSession();
+  const { user, role, loading, signOut } = useSession();
 
-  useEffect(() => {
-    if (user) {
-      isAdmin(user.id).then(setAdmin);
-    } else {
-      setAdmin(false);
-    }
-  }, [user]);
+  const admin = role === "admin" || role === "super_admin";
 
   const navLinks = useMemo(() => {
     const links: NavLink[] = [
