@@ -33,6 +33,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       .select("role")
       .eq("id", userId)
       .single();
+    console.log("DEBUG ROLE:", data?.role, "USER ID:", userId);
     setRole(data?.role as UserRole | null ?? null);
   }
 
