@@ -14,8 +14,6 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, role, loading, signOut } = useSession();
 
-  console.log("DEBUG HEADER ROLE:", role);
-
   const admin = role === "admin" || role === "super_admin";
 
   const navLinks = useMemo(() => {
