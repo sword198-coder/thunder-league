@@ -2,15 +2,23 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
 const protectedPaths = ["/tournaments", "/account", "/dashboard", "/admin"];
+const authPaths = ["/login", "/register"];
 
 export async function middleware(request: NextRequest) {
   const { response, user } = await updateSession(request);
 
   const { pathname } = request.nextUrl;
 
-  const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
+  // Redirect logged-in users away from auth pages
+  if (authPaths.some((p) => pathname.startsWith(p))) {
+    if (user) {
+      return NextResponse.redirect(new URL("/tournaments", request.url));
+    }
+    return response;
+  }
 
-  if (isProtected) {
+  // Protected pages require login
+  if (protectedPaths.some((p) => pathname.startsWith(p))) {
     if (!user) {
       return NextResponse.redirect(new URL("/login", request.url));
     }

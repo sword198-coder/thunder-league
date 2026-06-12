@@ -39,13 +39,15 @@ export default function HeroBanner() {
               >
                 Go to Tournaments
               </Link>
-            ) : (
+            ) : !loading && !user ? (
               <Link
                 href="/register"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20 hover:bg-white/20 transition-colors"
               >
                 Join Tournament
               </Link>
+            ) : (
+              <div className="w-44 h-12" />
             )}
           </div>
         </div>
