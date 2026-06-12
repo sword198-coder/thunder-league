@@ -54,52 +54,48 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
-            {loading ? null : (
-              <>
-                {navLinks.map((link) => {
-                  const isActive = !link.external && pathname === link.href;
-                  const Comp = link.external ? "a" : Link;
-                  const props = link.external
-                    ? { href: link.href, target: "_blank", rel: "noopener noreferrer" }
-                    : { href: link.href };
-                  const isAuth = link.label === "Login" || link.label === "Create Account" || link.label === "My Account";
+            {navLinks.map((link) => {
+              const isActive = !link.external && pathname === link.href;
+              const Comp = link.external ? "a" : Link;
+              const props = link.external
+                ? { href: link.href, target: "_blank", rel: "noopener noreferrer" }
+                : { href: link.href };
+              const isAuth = link.label === "Login" || link.label === "Create Account" || link.label === "My Account";
 
-                  return (
-                    <Comp
-                      key={link.label}
-                      {...props}
-                      className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                        isAuth
-                          ? link.label === "Create Account"
-                            ? "bg-secondary text-white hover:bg-secondary/90 shadow-sm"
-                            : "text-primary hover:bg-surface"
-                          : isActive
-                            ? "text-secondary"
-                            : "text-primary/70 hover:text-primary hover:bg-surface"
-                      }`}
-                    >
-                      {link.label}
-                      {isActive && !link.external && (
-                        <motion.div
-                          layoutId="activeNav"
-                          className="absolute bottom-0 left-2 right-2 h-0.5 bg-secondary rounded-full"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                        />
-                      )}
-                    </Comp>
-                  );
-                })}
-                {user && (
-                  <>
-                    <NotificationBell />
-                    <button
-                      onClick={signOut}
-                      className="relative px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-secondary text-white hover:bg-secondary/90 shadow-sm"
-                    >
-                      Logout
-                    </button>
-                  </>
-                )}
+              return (
+                <Comp
+                  key={link.label}
+                  {...props}
+                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    isAuth
+                      ? link.label === "Create Account"
+                        ? "bg-secondary text-white hover:bg-secondary/90 shadow-sm"
+                        : "text-primary hover:bg-surface"
+                      : isActive
+                        ? "text-secondary"
+                        : "text-primary/70 hover:text-primary hover:bg-surface"
+                  }`}
+                >
+                  {link.label}
+                  {isActive && !link.external && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute bottom-0 left-2 right-2 h-0.5 bg-secondary rounded-full"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Comp>
+              );
+            })}
+            {user && (
+              <>
+                <NotificationBell />
+                <button
+                  onClick={signOut}
+                  className="relative px-4 py-2 text-sm font-medium rounded-lg transition-colors bg-secondary text-white hover:bg-secondary/90 shadow-sm"
+                >
+                  Logout
+                </button>
               </>
             )}
           </nav>
@@ -121,7 +117,7 @@ export default function Header() {
       </div>
 
       <AnimatePresence>
-        {mobileOpen && !loading && (
+        {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
