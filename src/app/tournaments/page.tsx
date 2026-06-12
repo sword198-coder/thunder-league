@@ -47,7 +47,7 @@ export default function TournamentsPage() {
     setDrawBotSteps([]);
   }, []);
 
-  if (loading || !user || !user.email_confirmed_at) {
+  if (loading || !user) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
         <div className="animate-pulse text-primary/40 text-sm">Loading...</div>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSession } from "@/lib/supabase/session-provider";
 
 export default function HeroBanner() {
-  const { user, loading } = useSession();
+  const { user, username, loading } = useSession();
 
   return (
     <section className="relative w-full h-[500px] sm:h-[600px] lg:h-[700px] overflow-hidden">
@@ -32,22 +32,19 @@ export default function HeroBanner() {
             >
               View Leaderboard
             </Link>
-            {!loading && user ? (
-              <Link
-                href="/tournaments"
-                className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-secondary text-white font-semibold text-sm hover:bg-secondary/90 transition-colors shadow-lg"
-              >
-                Go to Tournaments
-              </Link>
-            ) : !loading && !user ? (
+            {loading ? (
+              <div className="w-44 h-12" />
+            ) : user ? (
+              <div className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20">
+                Welcome{username ? `, ${username}` : ""}
+              </div>
+            ) : (
               <Link
                 href="/register"
                 className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20 hover:bg-white/20 transition-colors"
               >
                 Join Tournament
               </Link>
-            ) : (
-              <div className="w-44 h-12" />
             )}
           </div>
         </div>

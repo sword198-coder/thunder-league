@@ -17,14 +17,16 @@ export default function AccountPage() {
   const [profileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setProfileLoading(false);
+      return;
+    }
     getProfile(user.id).then((profile) => {
       if (profile) {
         setUsername(profile.username);
         setAvatarUrl(profile.avatar_url);
       }
-      setProfileLoading(false);
-    });
+    }).catch(() => {}).finally(() => setProfileLoading(false));
   }, [user]);
 
   const handleAvatarSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

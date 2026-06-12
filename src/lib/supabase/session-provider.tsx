@@ -9,6 +9,7 @@ import type { UserRole } from "@/types";
 interface SessionContextValue {
   user: User | null;
   role: UserRole | null;
+  username: string | null;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -16,6 +17,7 @@ interface SessionContextValue {
 const SessionContext = createContext<SessionContextValue>({
   user: null,
   role: null,
+  username: null,
   loading: true,
   signOut: async () => {},
 });
@@ -23,17 +25,23 @@ const SessionContext = createContext<SessionContextValue>({
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<UserRole | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   async function fetchRole(userId: string) {
-    const supabase = createClient();
-    const { data } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", userId)
-      .single();
-    setRole(data?.role as UserRole | null ?? null);
+    try {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("profiles")
+        .select("role, username")
+        .eq("id", userId)
+        .single();
+      setRole(data?.role as UserRole | null ?? null);
+      setUsername(data?.username ?? null);
+    } catch {
+      // fetchRole failed silently - role/username remain null
+    }
   }
 
   useEffect(() => {
@@ -54,6 +62,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
           await fetchRole(session.user.id);
         } else {
           setRole(null);
+          setUsername(null);
         }
         setLoading(false);
 
@@ -73,11 +82,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signOut();
     setUser(null);
     setRole(null);
+    setUsername(null);
     router.push("/");
   };
 
   return (
-    <SessionContext.Provider value={{ user, role, loading, signOut }}>
+    <SessionContext.Provider value={{ user, role, username, loading, signOut }}>
       {children}
     </SessionContext.Provider>
   );
