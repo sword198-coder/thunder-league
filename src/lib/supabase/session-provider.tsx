@@ -39,23 +39,29 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const supabase = createClient();
 
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-      if (user) fetchRole(user.id);
-      setLoading(false);
-    });
+    supabase.auth.getUser()
+      .then(({ data: { user } }) => {
+        setUser(user);
+        if (user) fetchRole(user.id);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await fetchRole(session.user.id);
-      } else {
-        setRole(null);
-      }
-      setLoading(false);
+      try {
+        setUser(session?.user ?? null);
+        if (session?.user) {
+          await fetchRole(session.user.id);
+        } else {
+          setRole(null);
+        }
+        setLoading(false);
 
-      if (event === "SIGNED_IN") {
-        router.push("/tournaments");
+        if (event === "SIGNED_IN") {
+          router.push("/tournaments");
+        }
+      } catch {
+        setLoading(false);
       }
     });
 

@@ -1,6 +1,12 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useSession } from "@/lib/supabase/session-provider";
 
 export default function HeroBanner() {
+  const { user, loading } = useSession();
+
   return (
     <section className="relative w-full h-[500px] sm:h-[600px] lg:h-[700px] overflow-hidden">
       <Image
@@ -20,18 +26,27 @@ export default function HeroBanner() {
             The Official War Thunder Esports Championship
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/leaderboard"
               className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-secondary text-white font-semibold text-sm hover:bg-secondary/90 transition-colors shadow-lg"
             >
               View Leaderboard
-            </a>
-            <a
-              href="/register"
-              className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20 hover:bg-white/20 transition-colors"
-            >
-              Join Tournament
-            </a>
+            </Link>
+            {!loading && user ? (
+              <Link
+                href="/tournaments"
+                className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-secondary text-white font-semibold text-sm hover:bg-secondary/90 transition-colors shadow-lg"
+              >
+                Go to Tournaments
+              </Link>
+            ) : (
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold text-sm border border-white/20 hover:bg-white/20 transition-colors"
+              >
+                Join Tournament
+              </Link>
+            )}
           </div>
         </div>
       </div>
