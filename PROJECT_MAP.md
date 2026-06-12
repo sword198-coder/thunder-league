@@ -230,7 +230,7 @@ src/
         ├── server.ts            ← Server Supabase client (cookies, next/headers for SSR)
         ├── admin.ts             ← Admin Supabase client (SERVICE_ROLE_KEY, bypasses RLS)
         ├── middleware.ts        ← Session refresh cookie handler
-        ├── session-provider.tsx ← Auth React context (user, loading, signOut)
+        ├── session-provider.tsx ← Auth React context (user, role, loading, signOut) — fetches profiles.role
         └── types.ts             ← Database type definitions (profiles, tournaments, leaderboard_entries, admin_logs, tournament_registrations)
 ```
 
@@ -263,3 +263,4 @@ src/
 | Audit Logs              | DONE         | admin_logs table + /admin/logs viewer |
 | Static leaderboard data | REMOVED      | Replaced with leaderboard_entries table |
 | SUPABASE_SERVICE_ROLE_KEY| PENDING     | Must be set in .env.local and Vercel env |
+| next/image bypassed       | DONE        | `images.unoptimized: true` — all `<img>` instead of `<Image>` to fix 400 INVALID_IMAGE_OPTIMIZE_REQUEST |
